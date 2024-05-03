@@ -21,6 +21,6 @@ class PairOfSeatViewModelImp extends PairOfSeaPairOfSeatViewModel {
     return PairOfSeatViewModelImp(
         rightSeat: NormalSeat(no: 1, purpose: '台南'),
         leftSeat: NonSeat(no: 2),
-        destinations: ['台北', '台中', '台南', '高雄']);
+        destinations: ['台北', '台中', '台南', '高雄', '']);
   }
 }

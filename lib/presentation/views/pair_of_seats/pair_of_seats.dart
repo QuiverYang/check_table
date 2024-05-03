@@ -14,6 +14,8 @@ class PairOfSeats extends StatefulWidget {
 class _PairOfSeatsState extends State<PairOfSeats> {
   late PairOfSeatViewModelImp viewModel;
   final kCellHeight = 50.0;
+  final Color cellBackgroundColor = Colors.blue.shade100;
+  String tmp = '';
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _PairOfSeatsState extends State<PairOfSeats> {
   Widget build(BuildContext context) {
     return Container(
       height: kCellHeight,
-      padding: const EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.only(left: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -38,29 +40,41 @@ class _PairOfSeatsState extends State<PairOfSeats> {
             ),
           ),
           Expanded(
-            flex: 4,
-            child: DropdownMenu(
-              expandedInsets: const EdgeInsets.all(8),
-              menuStyle: MenuStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return Colors.blue.shade50; // Default Color
-                }),
-                shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
-                  (Set<MaterialState> states) {
-                    // You can add conditional logic based on the state here
-                    return RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    );
-                  },
+              flex: 5,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4), // 设置圆角
+                  border: Border.all(),
+                  color: cellBackgroundColor,
                 ),
-              ),
-              dropdownMenuEntries: viewModel.destinations
-                  .map((value) => DropdownMenuEntry(value: value, label: value))
-                  .toList(),
-              onSelected: (value) {},
-            ),
-          ),
+                child: DropdownButton<String>(
+                  value: tmp,
+                  alignment: Alignment.center,
+                  iconSize: 0,
+                  underline: Container(
+                    height: 0,
+                  ),
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(4),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      tmp = newValue ?? '';
+                    });
+                  },
+                  selectedItemBuilder: (BuildContext context) {
+                    return viewModel.destinations.map<Widget>((String value) {
+                      return Center(child: Text(value)); // 选中项居中显示
+                    }).toList();
+                  },
+                  items: viewModel.destinations
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              )),
           Expanded(
             flex: 1,
             child: Container(
@@ -70,29 +84,40 @@ class _PairOfSeatsState extends State<PairOfSeats> {
             ),
           ),
           Expanded(
-            flex: 4,
-            child: DropdownMenu(
-              expandedInsets: const EdgeInsets.all(8),
-              menuStyle: MenuStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                  return Colors.blue.shade50; // Default Color
-                }),
-                shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
-                  (Set<MaterialState> states) {
-                    // You can add conditional logic based on the state here
-                    return RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    );
+              flex: 5,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4), // 设置圆角
+                    border: Border.all(),
+                    color: cellBackgroundColor),
+                child: DropdownButton<String>(
+                  value: tmp,
+                  alignment: Alignment.center,
+                  iconSize: 0,
+                  underline: Container(
+                    height: 0,
+                  ),
+                  isExpanded: true,
+                  borderRadius: BorderRadius.circular(4),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      tmp = newValue ?? '';
+                    });
                   },
+                  selectedItemBuilder: (BuildContext context) {
+                    return viewModel.destinations.map<Widget>((String value) {
+                      return Center(child: Text(value)); // 选中项居中显示
+                    }).toList();
+                  },
+                  items: viewModel.destinations
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
-              ),
-              dropdownMenuEntries: viewModel.destinations
-                  .map((value) => DropdownMenuEntry(value: value, label: value))
-                  .toList(),
-              onSelected: (value) {},
-            ),
-          ),
+              )),
         ],
       ),
     );
