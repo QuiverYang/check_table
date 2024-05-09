@@ -1,7 +1,7 @@
 import 'package:check_table/models/car_map.dart';
 
-abstract class PairOfSeaPairOfSeatViewModel {
-  PairOfSeaPairOfSeatViewModel(
+abstract class PairOfSeatViewModel {
+  PairOfSeatViewModel(
       {required this.rightSeat,
       required this.leftSeat,
       required this.destinations});
@@ -11,7 +11,7 @@ abstract class PairOfSeaPairOfSeatViewModel {
   List<String> destinations;
 }
 
-class PairOfSeatViewModelImp extends PairOfSeaPairOfSeatViewModel {
+class PairOfSeatViewModelImp extends PairOfSeatViewModel {
   PairOfSeatViewModelImp(
       {required super.rightSeat,
       required super.leftSeat,

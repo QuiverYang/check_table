@@ -5,17 +5,18 @@ import 'pair_of_seat_view_model.dart';
 class PairOfSeats extends StatefulWidget {
   const PairOfSeats({super.key, required this.viewModel});
 
-  final PairOfSeatViewModelImp viewModel;
+  final PairOfSeatViewModel viewModel;
 
   @override
   State<PairOfSeats> createState() => _PairOfSeatsState();
 }
 
 class _PairOfSeatsState extends State<PairOfSeats> {
-  late PairOfSeatViewModelImp viewModel;
+  late PairOfSeatViewModel viewModel;
   final kCellHeight = 50.0;
   final Color cellBackgroundColor = Colors.blue.shade100;
-  String tmp = '';
+  String leftValue = '';
+  String rightValue = '';
 
   @override
   void initState() {
@@ -27,7 +28,6 @@ class _PairOfSeatsState extends State<PairOfSeats> {
   Widget build(BuildContext context) {
     return Container(
       height: kCellHeight,
-      padding: const EdgeInsets.only(left: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -48,7 +48,7 @@ class _PairOfSeatsState extends State<PairOfSeats> {
                   color: cellBackgroundColor,
                 ),
                 child: DropdownButton<String>(
-                  value: tmp,
+                  value: leftValue,
                   alignment: Alignment.center,
                   iconSize: 0,
                   underline: Container(
@@ -58,7 +58,8 @@ class _PairOfSeatsState extends State<PairOfSeats> {
                   borderRadius: BorderRadius.circular(4),
                   onChanged: (String? newValue) {
                     setState(() {
-                      tmp = newValue ?? '';
+                      leftValue = newValue ?? '';
+                      viewModel.leftSeat.purpose = leftValue;
                     });
                   },
                   selectedItemBuilder: (BuildContext context) {
@@ -78,10 +79,9 @@ class _PairOfSeatsState extends State<PairOfSeats> {
           Expanded(
             flex: 1,
             child: Container(
-              decoration: BoxDecoration(border: Border.all()),
-              alignment: Alignment.center,
-              child: const Text('1'),
-            ),
+                decoration: BoxDecoration(border: Border.all()),
+                alignment: Alignment.center,
+                child: Text(viewModel.rightSeat.no.toString())),
           ),
           Expanded(
               flex: 5,
@@ -91,7 +91,7 @@ class _PairOfSeatsState extends State<PairOfSeats> {
                     border: Border.all(),
                     color: cellBackgroundColor),
                 child: DropdownButton<String>(
-                  value: tmp,
+                  value: rightValue,
                   alignment: Alignment.center,
                   iconSize: 0,
                   underline: Container(
@@ -101,7 +101,8 @@ class _PairOfSeatsState extends State<PairOfSeats> {
                   borderRadius: BorderRadius.circular(4),
                   onChanged: (String? newValue) {
                     setState(() {
-                      tmp = newValue ?? '';
+                      rightValue = newValue ?? '';
+                      viewModel.rightSeat.purpose = rightValue;
                     });
                   },
                   selectedItemBuilder: (BuildContext context) {
