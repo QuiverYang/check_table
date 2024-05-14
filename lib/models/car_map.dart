@@ -1,16 +1,28 @@
 import 'station.dart';
+import 'package:uuid/uuid.dart';
 
-class Train {
+abstract class Train {
   Train(
       {required this.table,
       required this.stopStations,
       required this.no,
-      required this.title});
+      required this.title,
+      String? id})
+      : id = id ?? const Uuid().v4();
 
   List<CarTable> table;
   List<Station> stopStations;
   String no;
   String title;
+  String id;
+}
+
+class TrainImp extends Train {
+  TrainImp(
+      {required super.table,
+      required super.stopStations,
+      required super.no,
+      required super.title});
 }
 
 abstract class CarTable {

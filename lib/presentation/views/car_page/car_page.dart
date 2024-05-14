@@ -1,13 +1,12 @@
-import 'package:check_table/data/loader.dart';
+import 'package:check_table/data/repos/train_repo.dart';
 import 'package:flutter/material.dart';
 
 import '../pair_of_seats/pair_of_seats.dart';
 import 'car_page_view_model.dart';
+import 'package:provider/provider.dart';
 
 class CarPage extends StatefulWidget {
-  const CarPage({super.key, required this.loader});
-
-  final TrainLoader loader;
+  const CarPage({super.key});
 
   @override
   State<CarPage> createState() => _CarPageState();
@@ -34,15 +33,18 @@ class _CarPageState extends State<CarPage> {
   @override
   void initState() {
     super.initState();
-    widget.loader.load().then((train) {
-      setState(() {
-        viewModel = CarPageViewModelImp.fromTrain(train);
-      });
-    });
+    final trainRepo = context.read<TrainRepository>();
+    trainRepo.loadTrain();
   }
 
   @override
   Widget build(BuildContext context) {
+    final trainRepo = context.watch<TrainRepository>();
+    final currentTrain = trainRepo.currentTrain;
+    if (currentTrain != null) {
+      viewModel = CarPageViewModelImp.fromTrain(currentTrain);
+      title = currentTrain.title;
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -63,32 +65,36 @@ class _CarPageState extends State<CarPage> {
             )
           : Padding(
               key: UniqueKey(),
-              padding:
-                  const EdgeInsets.only(left: 4, right: 4, top: 0, bottom: 40),
+              padding: const EdgeInsets.only(left: 4, right: 4, top: 0),
               child: SingleChildScrollView(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: leftSideSeats(),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: leftSideSeats(),
+                          ),
+                        ),
+                        Container(
+                          height: 50.0 * viewModel!.rowNo,
+                          width: 20,
+                          color: Colors.grey,
+                          alignment: Alignment.center,
+                          child: const Text('走\n道'),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: rightSideSeats(),
+                          ),
+                        )
+                      ],
                     ),
-                    Container(
-                      height: 50.0 * viewModel!.rowNo,
-                      width: 20,
-                      color: Colors.grey,
-                      alignment: Alignment.center,
-                      child: const Text('走\n道'),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: rightSideSeats(),
-                      ),
-                    ),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
