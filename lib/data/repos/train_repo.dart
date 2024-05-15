@@ -1,5 +1,5 @@
 import 'package:check_table/data/loaders/train_loader.dart';
-import 'package:check_table/models/car_map.dart';
+import 'package:check_table/models/train.dart';
 import 'package:flutter/foundation.dart';
 
 class TrainRepository extends ChangeNotifier {

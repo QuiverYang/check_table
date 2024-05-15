@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import '../../../models/car_map.dart';
+import 'package:check_table/models/seat.dart';
+import 'package:check_table/models/train.dart';
+
 import '../pair_of_seats/pair_of_seat_view_model.dart';
 
 abstract class CarPageViewModel {
@@ -33,7 +35,7 @@ class CarPageViewModelImp extends CarPageViewModel {
   factory CarPageViewModelImp.fromTrain(Train train) {
     final List<PairOfSeatViewModel> leftSideSeatPairOfSeatViewModels = [];
     final List<PairOfSeatViewModel> rightSideSeatPairOfSeatViewModels = [];
-    final carTable = train.table.first;
+    final carTable = train.tables.first;
     final tempSeat = NormalSeat(no: -1, purpose: '');
     final destinations = train.stopStations.map((e) => e.name).toList();
     destinations.add('');

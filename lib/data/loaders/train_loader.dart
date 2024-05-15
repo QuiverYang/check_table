@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:check_table/data/loaders/station_loader.dart';
+import 'package:check_table/models/train.dart';
 
-import '../../models/car_map.dart';
+import '../../models/car_table.dart';
 
 abstract class TrainLoader {
   Future<TrainImp> load();
@@ -23,10 +24,10 @@ class LocalTrainLoader implements TrainLoader {
     final stationList =
         getRandomEntries(stations, 5).values.map((e) => e).toList();
     return TrainImp(
-      table: [table],
+      tables: [table],
       stopStations: stationList,
       no: '777',
-      title: '777 次列車',
+      title: '777 次列車 ${Random().nextInt(100)}',
     );
   }
 }

@@ -1,12 +1,13 @@
 import 'package:check_table/data/loaders/station_loader.dart';
 import 'package:check_table/data/repos/train_repo.dart';
+import 'package:check_table/models/train.dart';
 import 'package:check_table/presentation/views/train_list_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'data/loaders/train_list_loader.dart';
 import 'data/loaders/train_loader.dart';
 import 'presentation/views/car_page/car_page.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +64,6 @@ class _MyAppState extends State<MyApp> {
 
   List<Widget> pages = [
     const CarPage(),
-    TrainListPage(trainListLoader: LocalTrainListLoader())
+    TrainListPage(trainListLoader: LocalTrainListLoader(TrainJsonFactory()))
   ];
 }

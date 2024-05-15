@@ -1,4 +1,4 @@
-import 'package:check_table/models/car_map.dart';
+import 'package:check_table/models/seat.dart';
 
 abstract class PairOfSeatViewModel {
   PairOfSeatViewModel(
