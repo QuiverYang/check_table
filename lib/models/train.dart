@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:check_table/data/json_interface.dart';
+import 'package:check_table/data/loaders/station_loader.dart';
 import 'package:uuid/uuid.dart';
 
 import 'car_table.dart';
@@ -50,18 +53,58 @@ class TrainImp extends Train {
       {required super.tables,
       required super.stopStations,
       required super.no,
-      required super.title});
+      required super.title,
+      super.id});
 
   @override
   String get type => 'TrainImp';
 
   factory TrainImp.fromJson(Map<String, dynamic> json) {
     return TrainImp(
-        tables: json['tables'] ?? [],
-        stopStations:
-            json['stopStations']?.map((s) => StationFactory().fromJson(s)) ??
-                [],
+        tables: json['tables']
+                .map((t) => CarTableFactory().fromJson(t))
+                .toList()
+                .cast<CarTable>() ??
+            [],
+        stopStations: json['stopStations']
+                ?.map((s) => StationFactory().fromJson(s))
+                .toList()
+                .cast<Station>() ??
+            [],
         no: json['no'] ?? '',
-        title: json['title'] ?? '');
+        title: json['title'] ?? '',
+        id: json['id'] ?? '');
   }
+
+  static Future<TrainImp> test() async {
+    await Future.delayed(const Duration(seconds: 2));
+    final table = ReservedCar.empty(
+        seatStartNo: 1, seatEndNo: 52, carNo: '777', shouldReverse: false);
+    final stationLoader = LocalTrainStationLoader();
+    final stations = await stationLoader.load();
+    final stationList =
+        getRandomEntries(stations, 5).values.map((e) => e).toList();
+    return TrainImp(
+      tables: [table],
+      stopStations: stationList,
+      no: '777',
+      title: 'test次列車 ${Random().nextInt(100)}',
+    );
+  }
+}
+
+Map<K, V> getRandomEntries<K, V>(Map<K, V> map, int count) {
+  var rand = Random();
+  var keys = map.keys.toList();
+  var size = min(count, map.length);
+  Map<K, V> result = {};
+
+  for (int i = 0; i < size; i++) {
+    var index = rand.nextInt(keys.length);
+    var key = keys[index];
+    result[key] = map[key]!;
+    keys.removeAt(index); // 避免重复选择同一个键
+  }
+
+  return result;
 }

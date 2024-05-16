@@ -1,49 +1,18 @@
-import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:check_table/data/loaders/station_loader.dart';
-import 'package:check_table/models/train.dart';
-
-import '../../models/car_table.dart';
+import '../constants.dart';
 
 abstract class TrainLoader {
-  Future<TrainImp> load();
+  Future<String> load();
 }
 
 class LocalTrainLoader implements TrainLoader {
-  LocalTrainLoader({required this.stationLoader});
-
-  StationLoader stationLoader;
+  LocalTrainLoader();
 
   @override
-  Future<TrainImp> load() async {
-    //TODO: 假資料
-    await Future.delayed(const Duration(seconds: 2));
-    final table = ReservedCar.empty(
-        seatStartNo: 1, seatEndNo: 52, carNo: '777', shouldReverse: false);
-    final stations = await stationLoader.load();
-    final stationList =
-        getRandomEntries(stations, 5).values.map((e) => e).toList();
-    return TrainImp(
-      tables: [table],
-      stopStations: stationList,
-      no: '777',
-      title: '777 次列車 ${Random().nextInt(100)}',
-    );
+  Future<String> load() async {
+    final sp = await SharedPreferences.getInstance();
+    final result = sp.getString(keyOfCurrentTrainId);
+    return result ?? '';
   }
-}
-
-Map<K, V> getRandomEntries<K, V>(Map<K, V> map, int count) {
-  var rand = Random();
-  var keys = map.keys.toList();
-  var size = min(count, map.length);
-  Map<K, V> result = {};
-
-  for (int i = 0; i < size; i++) {
-    var index = rand.nextInt(keys.length);
-    var key = keys[index];
-    result[key] = map[key]!;
-    keys.removeAt(index); // 避免重复选择同一个键
-  }
-
-  return result;
 }

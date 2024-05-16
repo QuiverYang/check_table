@@ -16,21 +16,23 @@ class LocalTrainListSaver implements ListSaver<Train> {
   Future<void> save(List<Train> trains) async {
     final List<Map<String, dynamic>> jsonList =
         trains.map((train) => train.toJson()).toList();
+    print(jsonList.length);
     SharedPreferencesSaverHelper()
         .saveListOfJsonToStringList(keyOfTrainList, jsonList);
   }
 }
 
 class SharedPreferencesSaverHelper {
-  Future<void> saveListOfJsonToStringList(
+  Future<bool> saveListOfJsonToStringList(
       String key, List<Map<String, dynamic>> jsonList) async {
     try {
       final jsonStrings = jsonList.map((json) => jsonEncode(json)).toList();
       final sp = await SharedPreferences.getInstance();
-      sp.setStringList(key, jsonStrings);
+      return sp.setStringList(key, jsonStrings);
     } catch (error) {
       print('save json list error: ');
       print(error);
     }
+    return false;
   }
 }

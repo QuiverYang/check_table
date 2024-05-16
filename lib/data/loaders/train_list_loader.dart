@@ -23,13 +23,5 @@ class LocalTrainListLoader implements TrainListLoader {
       final json = jsonDecode(jsonString);
       return factory.fromJson(json);
     }).toList();
-    return [
-      TrainImp(
-        tables: [],
-        stopStations: [],
-        no: '777',
-        title: '777 次列車',
-      )
-    ];
   }
 }

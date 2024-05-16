@@ -78,7 +78,11 @@ class ReservedCar extends CarTable {
       seatStartNo: json['seatStartNo'] ?? -1,
       seatEndNo: json['seatEndNo'] ?? -1,
       carNo: json['carNo'] ?? '',
-      seats: json['seats']?.map((s) => SeatFactory().fromJson(s)) ?? [],
+      seats: json['seats']
+              ?.map((s) => SeatFactory().fromJson(s as Map<String, dynamic>))
+              .toList()
+              .cast<Seat>() ??
+          [],
     );
   }
 }

@@ -17,22 +17,18 @@ class TrainListPage extends StatefulWidget {
 }
 
 class _TrainListPageState extends State<TrainListPage> {
-  List<Train> trains = [];
-
   @override
   void initState() {
     super.initState();
-    widget.trainListLoader.load().then((value) {
-      setState(() {
-        trains = value;
-      });
+    final repo = Provider.of<TrainRepository>(context, listen: false);
+    repo.loadTrainList().then((value) {
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final trainRepo = context.watch<TrainRepository>();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -44,29 +40,38 @@ class _TrainListPageState extends State<TrainListPage> {
                 icon: const Icon(Icons.add),
                 onPressed: () async {
                   //TODO: 新增車次 表單
-                  final trainLoader = LocalTrainLoader(
-                      stationLoader: LocalTrainStationLoader());
-                  final train = await trainLoader.load();
-                  setState(() {
-                    trains.add(train);
-                  });
+                  await Navigator.of(context).pushNamed('/AddTrainPage');
+                  setState(() {});
                 },
               ))
         ],
       ),
-      body: ListView.builder(
-        itemCount: trains.length,
-        itemBuilder: (cxt, index) {
-          return ListTile(
-            title: Text(trains[index].title),
-            subtitle: Text('車次:${trains[index].no}'),
-            onTap: () {
-              print('tt: $index');
-              trainRepo.setTrainAndNotify(trains[index]);
-            },
-          );
-        },
-      ),
+      body: FutureBuilder(
+          future: trainRepo.loadTrainList(),
+          builder: (context, snapshot) {
+            final trains = trainRepo.trains;
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: trains.length,
+                itemBuilder: (cxt, index) {
+                  return ListTile(
+                    title: Text(trains[index].title),
+                    subtitle: Text('車次:${trains[index].no}'),
+                    onTap: () {
+                      print('tt: $index');
+                      trainRepo.setTrainAndNotify(trains[index]);
+                    },
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }
