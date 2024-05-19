@@ -51,4 +51,9 @@ class TrainRepository extends ChangeNotifier {
     _trainSaver.save(newValue.id);
     notifyListeners();
   }
+
+  clearTrainList() {
+    _trainListSaver.save([]);
+    notifyListeners();
+  }
 }

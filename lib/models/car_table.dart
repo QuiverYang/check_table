@@ -23,11 +23,11 @@ abstract class CarTable implements ToJson {
       required this.carNo,
       required this.seats});
 
-  final int seatStartNo;
-  final int seatEndNo;
-  final bool shouldReverse;
-  final String carNo;
-  final List<Seat> seats;
+  int seatStartNo;
+  int seatEndNo;
+  bool shouldReverse;
+  int carNo;
+  late List<Seat> seats;
 
   @override
   Map<String, dynamic> toJson() {
@@ -44,16 +44,16 @@ abstract class CarTable implements ToJson {
 
 class ReservedCar extends CarTable {
   ReservedCar(
-      {required super.seatStartNo,
-      required super.seatEndNo,
+      {super.seatStartNo = 1,
+      super.seatEndNo = 52,
       super.shouldReverse = false,
-      required super.carNo,
+      super.carNo = 1,
       required super.seats});
 
   factory ReservedCar.empty({
-    required int seatStartNo,
-    required int seatEndNo,
-    required String carNo,
+    int seatStartNo = 1,
+    int seatEndNo = 52,
+    int carNo = 1,
     bool shouldReverse = false,
   }) {
     List<Seat> seats = [];
@@ -77,7 +77,7 @@ class ReservedCar extends CarTable {
     return ReservedCar(
       seatStartNo: json['seatStartNo'] ?? -1,
       seatEndNo: json['seatEndNo'] ?? -1,
-      carNo: json['carNo'] ?? '',
+      carNo: json['carNo'] ?? -1,
       seats: json['seats']
               ?.map((s) => SeatFactory().fromJson(s as Map<String, dynamic>))
               .toList()

@@ -79,7 +79,7 @@ class TrainImp extends Train {
   static Future<TrainImp> test() async {
     await Future.delayed(const Duration(seconds: 2));
     final table = ReservedCar.empty(
-        seatStartNo: 1, seatEndNo: 52, carNo: '777', shouldReverse: false);
+        seatStartNo: 1, seatEndNo: 52, carNo: 777, shouldReverse: false);
     final stationLoader = LocalTrainStationLoader();
     final stations = await stationLoader.load();
     final stationList =

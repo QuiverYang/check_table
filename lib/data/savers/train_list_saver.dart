@@ -16,7 +16,6 @@ class LocalTrainListSaver implements ListSaver<Train> {
   Future<void> save(List<Train> trains) async {
     final List<Map<String, dynamic>> jsonList =
         trains.map((train) => train.toJson()).toList();
-    print(jsonList.length);
     SharedPreferencesSaverHelper()
         .saveListOfJsonToStringList(keyOfTrainList, jsonList);
   }

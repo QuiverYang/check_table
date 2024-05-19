@@ -33,6 +33,12 @@ class _TrainListPageState extends State<TrainListPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('清單'),
+        leading: TextButton(
+          onPressed: () {
+            trainRepo.clearTrainList();
+          },
+          child: const Text('全部清除'),
+        ),
         actions: [
           TextButton(
               onPressed: () {},
@@ -58,7 +64,6 @@ class _TrainListPageState extends State<TrainListPage> {
                     title: Text(trains[index].title),
                     subtitle: Text('車次:${trains[index].no}'),
                     onTap: () {
-                      print('tt: $index');
                       trainRepo.setTrainAndNotify(trains[index]);
                     },
                   );

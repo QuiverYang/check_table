@@ -23,6 +23,7 @@ class LocalTrainStationLoader implements StationLoader {
     for (var data in stations) {
       final st = data as List<dynamic>;
       if (st.length == 3) {
+        // 車站代號
         final no = st[0] as String;
         _cache![no] = TrainStation(name: st[1], no: st[0], english: st[2]);
       } else {
