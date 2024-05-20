@@ -17,14 +17,40 @@ class CarTableFactory implements JsonFactory<CarTable> {
 
 abstract class CarTable implements ToJson {
   CarTable(
-      {required this.seatStartNo,
-      required this.seatEndNo,
+      {required int seatStartNo,
+      required int seatEndNo,
       required this.shouldReverse,
       required this.carNo,
-      required this.seats});
+      required this.seats})
+      : _seatStartNo = seatStartNo,
+        _seatEndNo = seatEndNo;
 
-  int seatStartNo;
-  int seatEndNo;
+  int _seatStartNo;
+
+  int get seatStartNo => _seatStartNo;
+
+  void setSeatStartNo(int newValue) {
+    _seatStartNo = newValue;
+    _resetSeats();
+  }
+
+  int _seatEndNo;
+
+  int get seatEndNo => _seatEndNo;
+
+  void setSeatEndNo(int newValue) {
+    _seatEndNo = newValue;
+    _resetSeats();
+  }
+
+  _resetSeats() {
+    List<Seat> list = [];
+    for (int i = 0; i <= seatEndNo - seatStartNo; i++) {
+      list.add(NormalSeat(no: i + 1, purpose: ''));
+    }
+    seats = list;
+  }
+
   bool shouldReverse;
   int carNo;
   late List<Seat> seats;
@@ -60,12 +86,10 @@ class ReservedCar extends CarTable {
     for (int i = 0; i <= seatEndNo - seatStartNo; i++) {
       seats.add(NormalSeat(no: i + 1, purpose: ''));
     }
-    if (shouldReverse) {
-      seats = seats.reversed.toList();
-    }
     return ReservedCar(
         seatStartNo: seatStartNo,
         seatEndNo: seatEndNo,
+        shouldReverse: shouldReverse,
         carNo: carNo,
         seats: seats);
   }
@@ -77,6 +101,7 @@ class ReservedCar extends CarTable {
     return ReservedCar(
       seatStartNo: json['seatStartNo'] ?? -1,
       seatEndNo: json['seatEndNo'] ?? -1,
+      shouldReverse: json['shouldReverse'] ?? false,
       carNo: json['carNo'] ?? -1,
       seats: json['seats']
               ?.map((s) => SeatFactory().fromJson(s as Map<String, dynamic>))

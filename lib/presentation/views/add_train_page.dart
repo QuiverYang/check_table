@@ -128,8 +128,6 @@ class _AddTrainPageState extends State<AddTrainPage> {
                           icon: const Icon(Icons.add))
                     ],
                   ),
-                  //TODO: 動態增加
-                  //TODO: 把table資料拿出來塞到train裡面
                   Expanded(
                     child: ListView.separated(
                       separatorBuilder: (cxt, index) => const Divider(),
@@ -156,8 +154,10 @@ class TextInputCell extends StatelessWidget {
     this.onChanged,
     super.key,
   });
+
   final String title;
   final void Function(String)? onChanged;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -190,6 +190,7 @@ class TableCard extends StatelessWidget {
   const TableCard({super.key, required this.table});
 
   final CarTable table;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -218,7 +219,7 @@ class TableCard extends StatelessWidget {
                 start: 1,
                 end: 52,
                 onChanged: (int value) {
-                  table.seatStartNo = value;
+                  table.setSeatStartNo(value);
                 }),
             const SizedBox(height: 8),
             NumberDropdown(
@@ -227,7 +228,7 @@ class TableCard extends StatelessWidget {
                 start: 1,
                 end: 52,
                 onChanged: (int value) {
-                  table.seatStartNo = value;
+                  table.setSeatEndNo(value);
                 }),
             const SizedBox(height: 8),
             NumberDropdown(
@@ -237,11 +238,14 @@ class TableCard extends StatelessWidget {
                 end: 12,
                 onChanged: (int value) {
                   table.carNo = value;
+                  print(table.hashCode);
                 }),
             SwitchInput(
               title: '是否需要反轉座號排列',
               initialValue: table.shouldReverse,
               onChanged: (bool value) {
+                print('value: $value');
+                print(table.hashCode);
                 table.shouldReverse = value;
               },
             )
@@ -253,6 +257,7 @@ class TableCard extends StatelessWidget {
 class SwitchInput extends StatefulWidget {
   const SwitchInput(
       {super.key, required this.title, this.onChanged, this.initialValue});
+
   final String title;
   final bool? initialValue;
   final void Function(bool)? onChanged;
@@ -263,6 +268,7 @@ class SwitchInput extends StatefulWidget {
 
 class _SwitchInputState extends State<SwitchInput> {
   bool value = true;
+
   @override
   void initState() {
     super.initState();
@@ -297,6 +303,7 @@ class NumberDropdown extends StatefulWidget {
       required this.end,
       this.initialNumber,
       this.onChanged});
+
   final String title;
   final int start;
   final int end;

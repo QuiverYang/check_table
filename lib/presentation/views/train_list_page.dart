@@ -1,7 +1,4 @@
-import 'package:check_table/data/loaders/station_loader.dart';
 import 'package:check_table/data/loaders/train_list_loader.dart';
-import 'package:check_table/data/loaders/train_loader.dart';
-import 'package:check_table/models/train.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +42,6 @@ class _TrainListPageState extends State<TrainListPage> {
               child: IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () async {
-                  //TODO: 新增車次 表單
                   await Navigator.of(context).pushNamed('/AddTrainPage');
                   setState(() {});
                 },
